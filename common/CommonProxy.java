@@ -2,11 +2,6 @@ package scal.common;
 
 public class CommonProxy 
 {
-	public void registerRenders()
-	{
-		
-	}
-	
 	public void registerSounds()
 	{
 		
