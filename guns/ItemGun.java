@@ -2,6 +2,7 @@ package scal.guns;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import scal.common.SCal;
@@ -18,9 +19,9 @@ public class ItemGun extends Item
 {
 	public GunType Type;
 	
-	public ItemGun(int par1, GunType type) 
+	public ItemGun(GunType type) 
 	{
-		super(par1);
+		super(type.ItemID);
 		
 		this.Type = type;
 		this.setCreativeTab(SCal.gunTab);
@@ -149,6 +150,29 @@ public class ItemGun extends Item
 			case FullAuto:
 				lines.add("Automatic");
 				break;
+		}
+		
+		lines.add("");
+		lines.add("1 - Stats");
+		lines.add("2 - Attatchments");
+		lines.add("3 - Available Attachments");
+		
+		if(Keyboard.isKeyDown(49))
+		{
+			lines.clear();
+			lines.add("Stats - Test");
+		}
+		
+		if(Keyboard.isKeyDown(50))
+		{
+			lines.clear();
+			lines.add("Attachments - Test");
+		}
+		
+		if(Keyboard.isKeyDown(51))
+		{
+			lines.clear();
+			lines.add("Available Attachments - Test");
 		}
 	}
 	

@@ -1,5 +1,7 @@
 package scal.guns;
 
+import scal.common.VariableHandler;
+
 public class GunType 
 {
 	public int ItemID;
@@ -24,7 +26,6 @@ public class GunType
 	
 	public String ShootSound;
 	public String ReloadSound;
-	public boolean HasScope;
 	public String ScopePath;
 	
 	public enum FireType
@@ -51,7 +52,7 @@ public class GunType
 			int damage, float accuracyHip, float accuracyScope, float sightZoom,
 			FireType fType, WeaponType wType, float recoil, float bulletDrop, int maxCapacity,
 			int reloadTime, int shotInterval, float bulletSpeed,
-			String shootSound, String reloadSound, boolean hasScope, String scopePath)
+			String shootSound, String reloadSound, String scopePath)
 	{
 		this.ItemID = itemID;
 		this.TexturePath = texturePath;
@@ -75,7 +76,12 @@ public class GunType
 		
 		this.ShootSound = shootSound;
 		this.ReloadSound = reloadSound;
-		this.HasScope = hasScope;
 		this.ScopePath = scopePath;
 	}
+
+	public static GunType PistolM9 = new GunType(VariableHandler.ItemID, "m9", "M9", "m9",
+			4, .4f, .2f, 1.2f,
+			FireType.SemiAuto, WeaponType.Pistol, 1.2f, 0.01f, 15,
+			32, 3, 19f,
+			"m9", "m9", "m9");
 }

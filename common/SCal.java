@@ -1,6 +1,8 @@
 package scal.common;
 
 import scal.client.TickHandler;
+import scal.guns.GunType;
+import scal.guns.ItemGun;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
@@ -28,6 +30,8 @@ public class SCal
 	private Configuration _config;
 	
 	public static CreativeTabs gunTab = new CreativeTabs("gunTab");
+	
+	public static ItemGun m9 = new ItemGun(GunType.PistolM9);
 	
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
