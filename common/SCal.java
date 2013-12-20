@@ -1,6 +1,7 @@
 package scal.common;
 
 import scal.client.TickHandler;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -10,6 +11,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -24,6 +26,8 @@ public class SCal
 	public static CommonProxy Proxy;
 	
 	private Configuration _config;
+	
+	public static CreativeTabs gunTab = new CreativeTabs("gunTab");
 	
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
@@ -46,6 +50,6 @@ public class SCal
 	@EventHandler
 	public void Load(FMLInitializationEvent event)
 	{
-		
+		LanguageRegistry.instance().addStringLocalization("itemGroup.gunTab", "en_US", "SCal Mod");
 	}
 }
