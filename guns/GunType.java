@@ -11,10 +11,13 @@ public class GunType
 	public float AccuracyHip;
 	public float AccuracyScope;
 	public float SightZoom;
-	public FireType Type;
+	
+	public FireType FType;
+	public WeaponType WType;
 	public float Recoil;
 	public float BulletDrop;
 	public int MaxCapacity;
+	
 	public int ReloadTime;
 	public int ShotInterval;
 	public float BulletSpeed;
@@ -32,10 +35,21 @@ public class GunType
 		ThreeRound,
 		FullAuto
 	}
+	public enum WeaponType
+	{
+		Pistol,
+		SMG,
+		Shotgun,
+		AssaultRifle,
+		LMG,
+		Sniper,
+		Launcher,
+		Other
+	}
 	
 	public GunType(int itemID, String texturePath, String name, String shortName,
 			int damage, float accuracyHip, float accuracyScope, float sightZoom,
-			FireType type, float recoil, float bulletDrop, int maxCapacity,
+			FireType fType, WeaponType wType, float recoil, float bulletDrop, int maxCapacity,
 			int reloadTime, int shotInterval, float bulletSpeed,
 			String shootSound, String reloadSound, boolean hasScope, String scopePath)
 	{
@@ -49,7 +63,8 @@ public class GunType
 		this.AccuracyScope = accuracyScope;
 		this.SightZoom = sightZoom;
 		
-		this.Type = type;
+		this.FType = fType;
+		this.WType = wType;
 		this.Recoil = recoil;
 		this.BulletDrop = bulletDrop;
 		this.MaxCapacity = maxCapacity;

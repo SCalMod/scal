@@ -1,5 +1,7 @@
 package scal.guns;
 
+import java.util.List;
+
 import org.lwjgl.input.Mouse;
 
 import scal.common.SCal;
@@ -86,6 +88,68 @@ public class ItemGun extends Item
 		ammoTag.setShort("ItemID", (short)bulletStack.itemID);
 		ammoTag.setShort("NumItems", (short)bulletStack.stackSize);
 		ammoTag.setShort("Damage", (short)bulletStack.getItemDamage());
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedToolTips)
+	{
+		switch(this.Type.WType)
+		{
+			case Pistol:
+				lines.add("Pistol");
+				break;
+				
+			case SMG:
+				lines.add("Submachine Gun");
+				break;
+				
+			case Shotgun:
+				lines.add("Shotgun");
+				break;
+				
+			case AssaultRifle:
+				lines.add("Assault Rifle");
+				break;
+				
+			case LMG:
+				lines.add("Light Machine Gun");
+				break;
+				
+			case Sniper:
+				lines.add("Sniper");
+				break;
+				
+			case Launcher:
+				lines.add("Launcher");
+				break;
+				
+			case Other:
+				lines.add("Other");
+				break;
+		}
+		
+		switch(this.Type.FType)
+		{
+			case SingleShot:
+				lines.add("Single Shot");
+				break;
+				
+			case BoltAction:
+				lines.add("Bolt Action");
+				break;
+				
+			case SemiAuto:
+				lines.add("Semi Automatic");
+				break;
+				
+			case ThreeRound:
+				lines.add("Three Round Burst");
+				break;
+				
+			case FullAuto:
+				lines.add("Automatic");
+				break;
+		}
 	}
 	
 	@Override
