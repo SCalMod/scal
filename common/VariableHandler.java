@@ -9,6 +9,11 @@ public class VariableHandler
 	public static float ReticleScale = 1.0f;
 	public static boolean HasShot = false;
 	
-	public static int ItemID = 5000;
+	public static int ItemID = 15000;
 	public static boolean BreaksGlass = true;
+	
+	public static boolean KeyZ = false;
+	public static boolean KeyX = false;
+	public static boolean KeyC = false;
+	public static boolean KeyG = false;
 }

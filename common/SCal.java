@@ -1,10 +1,15 @@
 package scal.common;
 
+import org.lwjgl.input.Keyboard;
+
+import scal.client.KeybindClass;
 import scal.client.TickHandler;
 import scal.guns.GunType;
 import scal.guns.ItemGun;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.Configuration;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -17,11 +22,11 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "SCal", name = "SCal", version = "0.1.0")
+@Mod(modid = "SCal Guns", name = "SCal Guns Mod", version = "0.1.0")
 @NetworkMod(channels = {"SCal"}, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
 public class SCal 
 {
-	@Instance(value = "SCal")
+	@Instance(value = "SCal Guns")
 	public static SCal Instance;
 	
 	@SidedProxy(clientSide = "scal.client.ClientProxy", serverSide = "scal.common.CommonProxy")
@@ -54,6 +59,22 @@ public class SCal
 	@EventHandler
 	public void Load(FMLInitializationEvent event)
 	{
+		KeyBinding[] key = {
+				new KeyBinding("BUTTON_Z", Keyboard.KEY_Z),
+				new KeyBinding("BUTTON_X", Keyboard.KEY_X),
+				new KeyBinding("BUTTON_C", Keyboard.KEY_C),
+				new KeyBinding("BUTTON_G", Keyboard.KEY_G)
+				};
+		boolean[] repeat = {
+				false,
+				false,
+				false,
+				false
+				};
+		KeyBindingRegistry.registerKeyBinding(new KeybindClass(key, repeat));
+		
+		LanguageRegistry.addName(m9, "M9");
+		
 		LanguageRegistry.instance().addStringLocalization("itemGroup.gunTab", "en_US", "SCal Mod");
 	}
 }

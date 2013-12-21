@@ -5,8 +5,12 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import scal.client.KeybindClass;
 import scal.common.SCal;
 import scal.common.VariableHandler;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -153,23 +157,23 @@ public class ItemGun extends Item
 		}
 		
 		lines.add("");
-		lines.add("1 - Stats");
-		lines.add("2 - Attatchments");
-		lines.add("3 - Available Attachments");
+		lines.add("Z - Stats");
+		lines.add("X - Attatchments");
+		lines.add("C - Available Attachments");
 		
-		if(Keyboard.isKeyDown(49))
+		if(VariableHandler.KeyZ)
 		{
 			lines.clear();
 			lines.add("Stats - Test");
 		}
 		
-		if(Keyboard.isKeyDown(50))
+		if(VariableHandler.KeyX)
 		{
 			lines.clear();
 			lines.add("Attachments - Test");
 		}
 		
-		if(Keyboard.isKeyDown(51))
+		if(VariableHandler.KeyC)
 		{
 			lines.clear();
 			lines.add("Available Attachments - Test");
@@ -194,5 +198,12 @@ public class ItemGun extends Item
 		}
 		
 		return itemStack;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister register)
+	{
+		this.itemIcon = register.registerIcon("scal" + this.Type.TexturePath);
 	}
 }
