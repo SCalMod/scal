@@ -5,6 +5,10 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import scal.client.KeybindClass;
@@ -13,10 +17,12 @@ import scal.common.VariableHandler;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 
 public class ItemGun extends Item
@@ -32,7 +38,6 @@ public class ItemGun extends Item
 		this.setFull3D();
 		this.setMaxDamage(type.MaxCapacity);
 		this.setMaxStackSize(1);
-		this.setTextureName(type.TexturePath);
 		this.setUnlocalizedName(type.ShortName);
 	}
 	
@@ -42,7 +47,7 @@ public class ItemGun extends Item
 		return true;
 	}
 	
-	public ItemStack getBulletStack(ItemStack gunStack, int id)
+	public ItemStack getBulletStack(ItemStack gunStack)
 	{
 		if(!gunStack.hasTagCompound())
 		{
@@ -180,26 +185,108 @@ public class ItemGun extends Item
 		}
 	}
 	
-	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int inventoryIndex, boolean flag)
+	@SideOnly(Side.CLIENT)
+	public void onUpdateClient(ItemStack stack, World world, Entity entity, int i, boolean flag)
 	{
-		if(world.isRemote && !Mouse.isButtonDown(1))
+		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.getCurrentItem() == stack)
 		{
-			VariableHandler.HasShot = false;
-		}
-	}
-	
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player)
-	{
-		if(world.isRemote && VariableHandler.ShootInterval <= 0 && VariableHandler.ReloadInterval <= 0 && !VariableHandler.HasShot)
-		{
-			
+			VariableHandler.LastMouse = VariableHandler.MouseHeld;
+			VariableHandler.MouseHeld = Mouse.isButtonDown(1);
 		}
 		
-		return itemStack;
+		if(VariableHandler.MouseHeld && !VariableHandler.LastMouse)
+		{
+			ByteArrayDataOutput data = ByteStreams.newDataOutput();
+			data.writeByte(1);
+			PacketDispatcher.sendPacketToServer(new Packet250CustomPayload("SCal", data.toByteArray()));
+			this.clientSideShoot((EntityPlayer)entity, stack);
+		}
+		
+		if(this.Type.FType == GunType.FireType.FullAuto && VariableHandler.MouseHeld)
+		{
+			this.clientSideShoot((EntityPlayer)entity, stack);
+		}
+		
+		if(this.Type.FType == GunType.FireType.ThreeRound && VariableHandler.MouseHeld)
+		{
+			if(VariableHandler.ThreeRoundIterator < 3 && VariableHandler.ThreeRoundTimer <= 0)
+			{
+				this.clientSideShoot((EntityPlayer)entity, stack);
+				
+				if(VariableHandler.ThreeRoundIterator >= 3)
+				{
+					VariableHandler.ThreeRoundTimer = Type.ThreeRoundInterval;
+					VariableHandler.ThreeRoundIterator = 0;
+				}
+			}
+		}
 	}
 	
+	private void clientSideShoot(EntityPlayer entity, ItemStack stack) 
+	{
+		if(VariableHandler.ShootInterval <= 0)
+		{
+			boolean hasAmmo = false;
+			
+			ItemStack bulletStack = this.getBulletStack(stack);
+			
+			if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+			{
+				hasAmmo = true;
+			}
+			
+			if(hasAmmo)
+			{
+				VariableHandler.RecoilLevel += this.Type.Recoil;
+				VariableHandler.ShootInterval = this.Type.ShotInterval;
+			}
+		}
+	}
+	
+	public boolean reload(ItemStack stack, World world, Entity entity)
+	{
+		if(entity instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer)entity;
+			
+			boolean didReload = false;
+			
+			ItemStack bulletStack = this.getBulletStack(stack);
+			
+			int magazineSlot = -1;
+			int bulletsInSlot = 0;
+			
+			for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+			{
+				ItemStack item = player.inventory.getStackInSlot(i);
+				
+				if(item != null && item.getItem() instanceof ItemBullet && this.Type.isAmmo((ItemBullet)(item.getItem())))
+				{
+					int bulletsHere = item.getMaxDamage() - item.getItemDamage();
+					
+					if(bulletsHere > bulletsInSlot)
+					{
+						magazineSlot = i;
+						bulletsInSlot = bulletsHere;
+					}
+				}
+			}
+		}
+	}
+	
+	private void shoot(ItemStack stack, World world, EntityPlayer player)
+	{
+		//Play sound
+		
+		if(!world.isRemote)
+		{
+			for(int i = 0; i < this.Type.NumBullets; i++)
+			{
+				world.spawnEntityInWorld(new EntitySnowball(world, player));
+			}
+		}
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister register)

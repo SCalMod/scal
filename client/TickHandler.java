@@ -26,6 +26,15 @@ public class TickHandler implements IScheduledTickHandler
 			{
 				VariableHandler.HitMarkerTimer--;
 			}
+			if(VariableHandler.ThreeRoundTimer > 0)
+			{
+				VariableHandler.ThreeRoundTimer--;
+				
+				if(VariableHandler.ThreeRoundTimer <= 0)
+				{
+					VariableHandler.ThreeRoundIterator = 0;
+				}
+			}
 		}
 	}
 

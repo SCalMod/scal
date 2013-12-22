@@ -10,6 +10,7 @@ public class GunType
 	public String ShortName;
 	
 	public int Damage;
+	public int NumBullets;
 	public float AccuracyHip;
 	public float AccuracyScope;
 	public float SightZoom;
@@ -22,7 +23,9 @@ public class GunType
 	
 	public int ReloadTime;
 	public int ShotInterval;
+	public int ThreeRoundInterval;
 	public float BulletSpeed;
+	public BulletType[] Bullets;
 	
 	public String ShootSound;
 	public String ReloadSound;
@@ -49,9 +52,9 @@ public class GunType
 	}
 	
 	public GunType(int itemID, String texturePath, String name, String shortName,
-			int damage, float accuracyHip, float accuracyScope, float sightZoom,
+			int damage, int numBullets, float accuracyHip, float accuracyScope, float sightZoom,
 			FireType fType, WeaponType wType, float recoil, float bulletDrop, int maxCapacity,
-			int reloadTime, int shotInterval, float bulletSpeed,
+			int reloadTime, int shotInterval, int threeRoundInterval, float bulletSpeed, BulletType[] bullets,
 			String shootSound, String reloadSound, String scopePath)
 	{
 		this.ItemID = itemID;
@@ -60,6 +63,7 @@ public class GunType
 		this.ShortName = shortName;
 		
 		this.Damage = damage;
+		this.NumBullets = numBullets;
 		this.AccuracyHip = accuracyHip;
 		this.AccuracyScope = accuracyScope;
 		this.SightZoom = sightZoom;
@@ -72,16 +76,35 @@ public class GunType
 		
 		this.ReloadTime = reloadTime;
 		this.ShotInterval = shotInterval;
+		this.ThreeRoundInterval = threeRoundInterval;
 		this.BulletSpeed = bulletSpeed;
+		this.Bullets = bullets;
 		
 		this.ShootSound = shootSound;
 		this.ReloadSound = reloadSound;
 		this.ScopePath = scopePath;
 	}
 
-	public static GunType PistolM9 = new GunType(VariableHandler.ItemID, "m9", "M9", "m9",
-			4, .4f, .2f, 1.2f,
+	public static GunType PistolM9 = new GunType(
+			VariableHandler.ItemID, "m9", "M9", "m9",
+			4, 1, .4f, .2f, 1.2f,
 			FireType.SemiAuto, WeaponType.Pistol, 1.2f, 0.01f, 15,
-			32, 3, 19f,
-			"m9", "m9", "m9");
+			32, 3, 0, 19f, new BulletType[]{
+			BulletType.test
+			},
+			"m9", "m9", "m9"
+			);
+
+	public boolean isAmmo(ItemBullet bullet)
+	{
+		for(int i = 0; i < this.Bullets.length; i++)
+		{
+			if(bullet.Type == this.Bullets[i])
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
