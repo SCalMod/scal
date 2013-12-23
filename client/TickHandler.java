@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 import scal.common.SCal;
 import scal.common.VariableHandler;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.IScheduledTickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -41,10 +42,11 @@ public class TickHandler implements IScheduledTickHandler
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		if (type.contains(TickType.RENDER))
+		if (type.contains(TickType.RENDER) && FMLClientHandler.instance().getClient().currentScreen == null)
 		{
 			SCal.Proxy.renderMarker();
 			SCal.Proxy.renderSight();
+			SCal.Proxy.renderGUI();
 		}
 	}
 

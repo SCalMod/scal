@@ -17,6 +17,7 @@ import scal.common.VariableHandler;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -72,7 +73,7 @@ public class ItemGun extends Item
 		return new ItemStack(ammoTag.getShort("ItemID"), ammoTag.getShort("NumItems"), ammoTag.getShort("Damage"));
 	}
 	
-	public void setBulletStack(ItemStack gunStack, ItemStack bulletStack, int id)
+	public void setBulletStack(ItemStack gunStack, ItemStack bulletStack)
 	{
 		if(!gunStack.hasTagCompound())
 		{
@@ -242,14 +243,14 @@ public class ItemGun extends Item
 			}
 		}
 	}
-	
+
 	public boolean reload(ItemStack stack, World world, Entity entity)
 	{
+		boolean didReload = false;
+		
 		if(entity instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)entity;
-			
-			boolean didReload = false;
 			
 			ItemStack bulletStack = this.getBulletStack(stack);
 			
@@ -271,7 +272,43 @@ public class ItemGun extends Item
 					}
 				}
 			}
+			
+			if(magazineSlot != -1)
+			{
+				ItemStack newStack = player.inventory.getStackInSlot(magazineSlot);
+				BulletType bType = ((ItemBullet)newStack.getItem()).Type;
+				
+				if(bulletStack != null)
+				{
+					if(bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+					{
+						int newSize = 0;
+						
+						if(newStack.getMaxDamage() - newStack.getItemDamage() <= bulletStack.getMaxDamage() - bulletStack.getItemDamage())
+						{
+							newSize = newStack.getMaxDamage() - newStack.getItemDamage();
+						}
+						else
+						{
+							newSize = (newStack.getMaxDamage() - newStack.getItemDamage()) - bulletStack.getItemDamage();
+						}
+
+						newStack.damageItem(newSize, player);
+						bulletStack.setItemDamage(bulletStack.getItemDamage() - newSize);
+						
+						this.setBulletStack(stack, bulletStack);
+					}
+					else
+					{
+						this.setBulletStack(stack, newStack);
+					}
+					
+					didReload = true;
+				}
+			}
 		}
+		
+		return didReload;
 	}
 	
 	private void shoot(ItemStack stack, World world, EntityPlayer player)
@@ -285,6 +322,8 @@ public class ItemGun extends Item
 				world.spawnEntityInWorld(new EntitySnowball(world, player));
 			}
 		}
+		
+		VariableHandler.ShootInterval = this.Type.ShotInterval;
 	}
 
 	@Override

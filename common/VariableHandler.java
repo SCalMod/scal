@@ -2,7 +2,7 @@ package scal.common;
 
 public class VariableHandler 
 {
-	public static int HitMarkerTimer = 0;
+	public static int HitMarkerTimer = 5000;
 	public static int ShootInterval = 0;
 	public static int ReloadInterval = 0;
 	public static int ThreeRoundIterator = 0;
