@@ -21,11 +21,11 @@ public class TickHandler implements IScheduledTickHandler
 			}
 			if(VariableHandler.ReloadInterval > 0)
 			{
-				VariableHandler.HitMarkerTimer--;
+				VariableHandler.ReloadInterval--;
 			}
 			if(VariableHandler.ShootInterval > 0)
 			{
-				VariableHandler.HitMarkerTimer--;
+				VariableHandler.ShootInterval--;
 			}
 			if(VariableHandler.ThreeRoundTimer > 0)
 			{

@@ -16,6 +16,7 @@ import scal.common.SCal;
 import scal.common.VariableHandler;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntitySnowball;
@@ -30,7 +31,7 @@ public class ItemGun extends Item
 {
 	public GunType Type;
 	
-	public ItemGun(GunType type) 
+	public ItemGun(GunType type)
 	{
 		super(type.ItemID);
 		
@@ -41,66 +42,164 @@ public class ItemGun extends Item
 		this.setMaxStackSize(1);
 		this.setUnlocalizedName(type.ShortName);
 	}
-	
+
 	@Override
-	public boolean getShareTag()
+	public void onUpdate(ItemStack itemStack, World world, Entity entity, int inventoryIndex, boolean flag)
 	{
-		return true;
-	}
-	
-	public ItemStack getBulletStack(ItemStack gunStack)
-	{
-		if(!gunStack.hasTagCompound())
+		if (world.isRemote)
 		{
-			gunStack.stackTagCompound = new NBTTagCompound("Tag");
-			return null;
+			if(!Mouse.isButtonDown(1))
+			{
+				VariableHandler.IsShooting = false;
+			}
+			else
+			{
+				if(entity instanceof EntityPlayer)
+				{
+					if(this.Type.FType == GunType.FireType.FullAuto)
+					{
+						this.attemptShot(itemStack, world, (EntityPlayer)entity);
+					}
+					if(this.Type.FType == GunType.FireType.ThreeRound)
+					{
+						if(VariableHandler.ThreeRoundIterator < 3)
+						{
+							this.attemptShot(itemStack, world, (EntityPlayer)entity);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer entityPlayer)
+	{
+		if(!VariableHandler.IsShooting || this.Type.FType == GunType.FireType.FullAuto || this.Type.FType == GunType.FireType.ThreeRound)
+		{
+			if(this.Type.FType == GunType.FireType.ThreeRound)
+			{
+				if(VariableHandler.ThreeRoundIterator < 3)
+				{
+					this.attemptShot(itemStack, world, entityPlayer);
+				}
+			}
+			else
+			{
+				this.attemptShot(itemStack, world, entityPlayer);
+			}
 		}
 		
-		if(!gunStack.stackTagCompound.hasKey("AmmoStack"))
+		return itemStack;
+	}
+	
+	private boolean attemptShot(ItemStack itemStack, World world, EntityPlayer player)
+	{
+		if(world.isRemote && VariableHandler.ShootInterval <= 0 && VariableHandler.ReloadInterval <= 0)
 		{
-			gunStack.stackTagCompound.setCompoundTag("AmmoStack", new NBTTagCompound());
+			if(this.Type.FType == GunType.FireType.ThreeRound && VariableHandler.ThreeRoundTimer > 0)
+			{
+				return false;
+			}
 			
-			return null;
+			if(itemStack.getItemDamage() < itemStack.getMaxDamage())
+			{
+				ByteArrayDataOutput data = ByteStreams.newDataOutput();
+				data.writeByte(1);
+				PacketDispatcher.sendPacketToServer(new Packet250CustomPayload("SCal", data.toByteArray()));
+				VariableHandler.ShootInterval = this.Type.ShotInterval;
+				VariableHandler.IsShooting = true;
+				
+				if(this.Type.FType == GunType.FireType.ThreeRound)
+				{
+					VariableHandler.ThreeRoundIterator++;
+					if(VariableHandler.ThreeRoundIterator >= 3)
+					{
+						VariableHandler.ThreeRoundTimer = this.Type.ThreeRoundInterval;
+						VariableHandler.IsShooting = false;
+					}
+				}
+				
+				if(!player.capabilities.isCreativeMode)
+				{
+					itemStack.damageItem(1, player);
+				}
+				
+				return true;
+			}
+			else
+			{
+				if(this.reload(itemStack, world, player))
+				{
+					VariableHandler.ReloadInterval = this.Type.ReloadTime;
+				}
+			}
 		}
 		
-		NBTTagCompound ammoTag = gunStack.stackTagCompound.getCompoundTag("AmmoStack");
-		
-		if(!ammoTag.hasKey("ItemID"))
-		{
-			return null;
-		}
-		
-		return new ItemStack(ammoTag.getShort("ItemID"), ammoTag.getShort("NumItems"), ammoTag.getShort("Damage"));
+		return false;
 	}
 	
-	public void setBulletStack(ItemStack gunStack, ItemStack bulletStack)
+	public boolean reload(ItemStack stack, World world, Entity entity)
 	{
-		if(!gunStack.hasTagCompound())
-		{
-			gunStack.stackTagCompound = new NBTTagCompound("Tag");
-		}
+		boolean didReload = false;
 		
-		if(!gunStack.stackTagCompound.hasKey("AmmoStack"))
+		if(entity instanceof EntityPlayer)
 		{
-			NBTTagCompound ammoTag = new NBTTagCompound();
+			EntityPlayer player = (EntityPlayer)entity;
 			
-			gunStack.stackTagCompound.setCompoundTag("AmmoStack", ammoTag);
+			int magazineSlot = -1;
+			int bulletsInSlot = 0;
+			
+			for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+			{
+				ItemStack item = player.inventory.getStackInSlot(i);
+				
+				if(item != null && item.getItem() instanceof ItemBullet && this.Type.isAmmo((ItemBullet)(item.getItem())))
+				{
+					int bulletsHere = item.getMaxDamage() - item.getItemDamage();
+					
+					if(bulletsHere > bulletsInSlot)
+					{
+						magazineSlot = i;
+						bulletsInSlot = bulletsHere;
+					}
+				}
+			}
+			
+			if(magazineSlot != -1)
+			{
+				ItemStack newStack = player.inventory.getStackInSlot(magazineSlot);
+				BulletType bType = ((ItemBullet)newStack.getItem()).Type;
+				
+				if(stack.getItemDamage() < stack.getItem().getMaxDamage())
+				{
+					int newSize = 0;
+					
+					if(newStack.getMaxDamage() - newStack.getItemDamage() <= stack.getMaxDamage() - stack.getItemDamage())
+					{
+						newSize = newStack.getMaxDamage() - newStack.getItemDamage();
+					}
+					else
+					{
+						newSize = (newStack.getMaxDamage() - newStack.getItemDamage()) - stack.getItemDamage();
+					}
+
+					newStack.damageItem(newSize, player);
+					stack.setItemDamage(stack.getItemDamage() - newSize);
+				}
+				else
+				{
+					stack.setItemDamage(newStack.getMaxDamage() - newStack.getItemDamage());
+					newStack.damageItem(newStack.getMaxDamage() - newStack.getItemDamage(), player);
+				}
+				
+				didReload = true;
+			}
 		}
 		
-		NBTTagCompound ammoTag = gunStack.stackTagCompound.getCompoundTag("Tag");
-		
-		if(bulletStack == null)
-		{
-			ammoTag.removeTag("ItemID");
-			ammoTag.removeTag("NumItems");
-			ammoTag.removeTag("Damage");
-		}
-		
-		ammoTag.setShort("ItemID", (short)bulletStack.itemID);
-		ammoTag.setShort("NumItems", (short)bulletStack.stackSize);
-		ammoTag.setShort("Damage", (short)bulletStack.getItemDamage());
+		return didReload;
 	}
-	
+
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedToolTips)
 	{
@@ -170,7 +269,15 @@ public class ItemGun extends Item
 		if(VariableHandler.KeyZ)
 		{
 			lines.clear();
-			lines.add("Stats - Test");
+			lines.add("Stats");
+			lines.add("Damage: " + Integer.toString(this.Type.Damage));
+			lines.add("Bullets Per Shot: " + Integer.toString(this.Type.NumBullets));
+			lines.add("Accuracy Hip: " + Float.toString(this.Type.AccuracyHip));
+			lines.add("Scoped Accuracy: " + Float.toString(this.Type.AccuracyScope));
+			lines.add("Recoil: " + Float.toString(this.Type.Recoil));
+			lines.add("Max Capacity: " + Integer.toString(this.Type.MaxCapacity));
+			lines.add("Reload Time: " + Integer.toString(this.Type.ReloadTime));
+			lines.add("Rate Of Fire: " + Float.toString((20f / (float)this.Type.ShotInterval) * 60) + " Rounds Per Minute");
 		}
 		
 		if(VariableHandler.KeyX)
@@ -185,147 +292,23 @@ public class ItemGun extends Item
 			lines.add("Available Attachments - Test");
 		}
 	}
-	
-	@SideOnly(Side.CLIENT)
-	public void onUpdateClient(ItemStack stack, World world, Entity entity, int i, boolean flag)
+
+	@Override
+	public boolean onBlockStartBreak(ItemStack itemStack, int x, int y, int z, EntityPlayer entityplayer)
 	{
-		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.getCurrentItem() == stack)
+		if (VariableHandler.ZoomLevel > 1.0)
 		{
-			VariableHandler.LastMouse = VariableHandler.MouseHeld;
-			VariableHandler.MouseHeld = Mouse.isButtonDown(1);
+			return true;
 		}
-		
-		if(VariableHandler.MouseHeld && !VariableHandler.LastMouse)
-		{
-			ByteArrayDataOutput data = ByteStreams.newDataOutput();
-			data.writeByte(1);
-			PacketDispatcher.sendPacketToServer(new Packet250CustomPayload("SCal", data.toByteArray()));
-			this.clientSideShoot((EntityPlayer)entity, stack);
-		}
-		
-		if(this.Type.FType == GunType.FireType.FullAuto && VariableHandler.MouseHeld)
-		{
-			this.clientSideShoot((EntityPlayer)entity, stack);
-		}
-		
-		if(this.Type.FType == GunType.FireType.ThreeRound && VariableHandler.MouseHeld)
-		{
-			if(VariableHandler.ThreeRoundIterator < 3 && VariableHandler.ThreeRoundTimer <= 0)
-			{
-				this.clientSideShoot((EntityPlayer)entity, stack);
-				
-				if(VariableHandler.ThreeRoundIterator >= 3)
-				{
-					VariableHandler.ThreeRoundTimer = Type.ThreeRoundInterval;
-					VariableHandler.ThreeRoundIterator = 0;
-				}
-			}
-		}
+		return false;
 	}
 	
-	private void clientSideShoot(EntityPlayer entity, ItemStack stack) 
-	{
-		if(VariableHandler.ShootInterval <= 0)
-		{
-			boolean hasAmmo = false;
-			
-			ItemStack bulletStack = this.getBulletStack(stack);
-			
-			if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
-			{
-				hasAmmo = true;
-			}
-			
-			if(hasAmmo)
-			{
-				VariableHandler.RecoilLevel += this.Type.Recoil;
-				VariableHandler.ShootInterval = this.Type.ShotInterval;
-			}
-		}
-	}
-
-	public boolean reload(ItemStack stack, World world, Entity entity)
-	{
-		boolean didReload = false;
-		
-		if(entity instanceof EntityPlayer)
-		{
-			EntityPlayer player = (EntityPlayer)entity;
-			
-			ItemStack bulletStack = this.getBulletStack(stack);
-			
-			int magazineSlot = -1;
-			int bulletsInSlot = 0;
-			
-			for(int i = 0; i < player.inventory.getSizeInventory(); i++)
-			{
-				ItemStack item = player.inventory.getStackInSlot(i);
-				
-				if(item != null && item.getItem() instanceof ItemBullet && this.Type.isAmmo((ItemBullet)(item.getItem())))
-				{
-					int bulletsHere = item.getMaxDamage() - item.getItemDamage();
-					
-					if(bulletsHere > bulletsInSlot)
-					{
-						magazineSlot = i;
-						bulletsInSlot = bulletsHere;
-					}
-				}
-			}
-			
-			if(magazineSlot != -1)
-			{
-				ItemStack newStack = player.inventory.getStackInSlot(magazineSlot);
-				BulletType bType = ((ItemBullet)newStack.getItem()).Type;
-				
-				if(bulletStack != null)
-				{
-					if(bulletStack.getItemDamage() < bulletStack.getMaxDamage())
-					{
-						int newSize = 0;
-						
-						if(newStack.getMaxDamage() - newStack.getItemDamage() <= bulletStack.getMaxDamage() - bulletStack.getItemDamage())
-						{
-							newSize = newStack.getMaxDamage() - newStack.getItemDamage();
-						}
-						else
-						{
-							newSize = (newStack.getMaxDamage() - newStack.getItemDamage()) - bulletStack.getItemDamage();
-						}
-
-						newStack.damageItem(newSize, player);
-						bulletStack.setItemDamage(bulletStack.getItemDamage() - newSize);
-						
-						this.setBulletStack(stack, bulletStack);
-					}
-					else
-					{
-						this.setBulletStack(stack, newStack);
-					}
-					
-					didReload = true;
-				}
-			}
-		}
-		
-		return didReload;
-	}
+	@Override
+    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
+    {
+        return true;
+    }
 	
-	private void shoot(ItemStack stack, World world, EntityPlayer player)
-	{
-		//Play sound
-		
-		if(!world.isRemote)
-		{
-			for(int i = 0; i < this.Type.NumBullets; i++)
-			{
-				world.spawnEntityInWorld(new EntitySnowball(world, player));
-			}
-		}
-		
-		VariableHandler.ShootInterval = this.Type.ShotInterval;
-	}
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister register)

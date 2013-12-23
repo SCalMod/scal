@@ -41,8 +41,6 @@ public class ClientProxy extends CommonProxy
             tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
             tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
             tessellator.draw();
-			
-			VariableHandler.HitMarkerTimer--;
 		}
 	}
 

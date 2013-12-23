@@ -2,7 +2,7 @@ package scal.common;
 
 public class VariableHandler 
 {
-	public static int HitMarkerTimer = 5000;
+	public static int HitMarkerTimer = 0;
 	public static int ShootInterval = 0;
 	public static int ReloadInterval = 0;
 	public static int ThreeRoundIterator = 0;
@@ -10,7 +10,7 @@ public class VariableHandler
 	public static float RecoilLevel = 0f;
 	public static float ZoomLevel = 1.0f;
 	public static float ReticleScale = 1.0f;
-	public static boolean HasShot = false;
+	public static boolean IsShooting = false;
 	public static boolean LastMouse = false;
 	public static boolean MouseHeld = false;
 	
