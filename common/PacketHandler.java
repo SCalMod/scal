@@ -8,7 +8,7 @@ import scal.client.EventHook;
 import scal.guns.ItemGun;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -37,9 +37,10 @@ public class PacketHandler implements IPacketHandler
 					ItemGun gun = (ItemGun)inventory.getCurrentItem().getItem();
 					
 					//world.playSoundAtEntity(entityPlayer, EventHook.GUN_SHOOT, 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F));
+					VariableHandler.RecoilLevel += gun.Type.Recoil;
 					for (int i = 0; i < gun.Type.NumBullets; i ++)
 					{
-						world.spawnEntityInWorld(new EntitySnowball(world, entityPlayer));
+						world.spawnEntityInWorld(new EntityArrow(world, entityPlayer, gun.Type.BulletSpeed));
 					}
 				}
 			}

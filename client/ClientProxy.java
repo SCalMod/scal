@@ -92,6 +92,8 @@ public class ClientProxy extends CommonProxy
 	            tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
 	            tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
 				tessellator.draw();
+				
+				VariableHandler.IsScoped = true;
 			}
 			else
 			{
@@ -103,8 +105,24 @@ public class ClientProxy extends CommonProxy
 				{
 					VariableHandler.ZoomLevel = 1.0F;
 				}
+				
 				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, client.entityRenderer, VariableHandler.ZoomLevel, "cameraZoom", "field_78503_V");
+				
+				VariableHandler.IsScoped = false;
 			}
+		}
+	}
+	
+	@Override
+	public void updateRecoil()
+	{
+		Minecraft client = FMLClientHandler.instance().getClient();
+		
+		if(client.thePlayer != null)
+		{
+			client.thePlayer.rotationPitch -= VariableHandler.RecoilLevel;
+			client.thePlayer.rotationPitch += VariableHandler.AntiRecoil * 0.2f;
+			VariableHandler.AntiRecoil *= 0.8f;
 		}
 	}
 

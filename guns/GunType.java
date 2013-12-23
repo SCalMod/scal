@@ -51,14 +51,13 @@ public class GunType
 		Other
 	}
 	
-	public GunType(int itemID, String texturePath, String name, String shortName,
+	public GunType(int itemID, String shortName, String name,
 			int damage, int numBullets, float accuracyHip, float accuracyScope, float sightZoom,
 			FireType fType, WeaponType wType, float recoil, float bulletDrop, int maxCapacity,
-			int reloadTime, int shotInterval, int threeRoundInterval, float bulletSpeed, BulletType[] bullets,
-			String shootSound, String reloadSound, String scopePath)
+			int reloadTime, int shotInterval, int threeRoundInterval, float bulletSpeed, BulletType[] bullets)
 	{
 		this.ItemID = itemID;
-		this.TexturePath = texturePath;
+		this.TexturePath = shortName;
 		this.Name = name;
 		this.ShortName = shortName;
 		
@@ -80,21 +79,11 @@ public class GunType
 		this.BulletSpeed = bulletSpeed;
 		this.Bullets = bullets;
 		
-		this.ShootSound = shootSound;
-		this.ReloadSound = reloadSound;
-		this.ScopePath = scopePath;
+		this.ShootSound = shortName;
+		this.ReloadSound = shortName;
+		this.ScopePath = shortName;
 	}
-
-	public static GunType PistolM9 = new GunType(
-			VariableHandler.ItemID, "m9", "M9", "m9",
-			4, 1, .4f, .2f, 1.2f,
-			FireType.SemiAuto, WeaponType.Pistol, 1.2f, 0.01f, 15,
-			32, 3, 0, 19f, new BulletType[]{
-			BulletType.test
-			},
-			"m9", "m9", "m9"
-			);
-
+	
 	public boolean isAmmo(ItemBullet bullet)
 	{
 		for(int i = 0; i < this.Bullets.length; i++)
@@ -107,4 +96,22 @@ public class GunType
 		
 		return false;
 	}
+
+	//Pistols
+	
+	public static GunType PistolM9 = new GunType(
+			VariableHandler.ItemID, "m9", "M9",
+			4, 1, .3f, .6f, 1.1f,
+			FireType.SemiAuto, WeaponType.Pistol, 0.45f, 0.01f, 15,
+			32, 3, 0, 19f, new BulletType[]{
+			BulletType.test
+			});
+	
+	public static GunType PistolM1911 = new GunType(
+			VariableHandler.ItemID + 1, "m1911", "M1911",
+			5, 1, .4f, .7f, 1.2f,
+			FireType.SemiAuto, WeaponType.Pistol, 0.5f, 0.01f, 8,
+			40, 4, 0, 12.5f, new BulletType[]{
+			BulletType.test
+			});
 }

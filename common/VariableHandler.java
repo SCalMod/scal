@@ -8,11 +8,11 @@ public class VariableHandler
 	public static int ThreeRoundIterator = 0;
 	public static int ThreeRoundTimer = 0;
 	public static float RecoilLevel = 0f;
+	public static float AntiRecoil = 0f;
 	public static float ZoomLevel = 1.0f;
 	public static float ReticleScale = 1.0f;
 	public static boolean IsShooting = false;
-	public static boolean LastMouse = false;
-	public static boolean MouseHeld = false;
+	public static boolean IsScoped = false;
 	
 	public static int ItemID = 15000;
 	public static boolean BreaksGlass = true;
