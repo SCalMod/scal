@@ -32,7 +32,7 @@ public class PacketHandler implements IPacketHandler
 		{
 			int packetType = data.readByte();
 			
-			if (packetType == 1 && inventory.getCurrentItem() != null && inventory.getCurrentItem().getItem() instanceof ItemGun)
+			if (packetType == 1 && inventory.getCurrentItem() != null && inventory.getCurrentItem().getItem() instanceof ItemGun && !world.isRemote)
 			{
 				if (inventory.getCurrentItem().getItem() instanceof ItemGun)
 				{
