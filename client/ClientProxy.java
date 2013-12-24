@@ -9,13 +9,21 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import scal.common.CommonProxy;
 import scal.common.VariableHandler;
+import scal.guns.EntityBullet;
 import scal.guns.ItemGun;
 
 public class ClientProxy extends CommonProxy
 {
+	@Override
+	public void RegisterRenders()
+	{
+		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
+	}
+	
 	@Override
 	public void registerSounds()
 	{

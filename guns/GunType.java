@@ -4,6 +4,9 @@ import scal.common.VariableHandler;
 
 public class GunType 
 {
+	public static GunType[] Guns = new GunType[180];
+	
+	public int GunID;
 	public int ItemID;
 	public String TexturePath;
 	public String Name;
@@ -25,7 +28,7 @@ public class GunType
 	public int ShotInterval;
 	public int ThreeRoundInterval;
 	public float BulletSpeed;
-	public BulletType[] Bullets;
+	public int[] Bullets;
 	
 	public String ShootSound;
 	public String ReloadSound;
@@ -51,11 +54,12 @@ public class GunType
 		Other
 	}
 	
-	public GunType(int itemID, String shortName, String name,
+	public GunType(int gunID, int itemID, String shortName, String name,
 			int damage, int numBullets, float accuracyHip, float accuracyScope, float sightZoom,
 			FireType fType, WeaponType wType, float recoil, float bulletDrop, int maxCapacity,
-			int reloadTime, int shotInterval, int threeRoundInterval, float bulletSpeed, BulletType[] bullets)
+			int reloadTime, int shotInterval, int threeRoundInterval, float bulletSpeed, int[] bullets)
 	{
+		this.GunID = gunID;
 		this.ItemID = itemID;
 		this.TexturePath = shortName;
 		this.Name = name;
@@ -82,13 +86,22 @@ public class GunType
 		this.ShootSound = shortName;
 		this.ReloadSound = shortName;
 		this.ScopePath = shortName;
+		
+		if(Guns[gunID] == null)
+		{
+			Guns[gunID] = this;
+		}
+		else
+		{
+			System.out.println("SCal Guns: Gun ID conflict");
+		}
 	}
 	
 	public boolean isAmmo(ItemBullet bullet)
 	{
 		for(int i = 0; i < this.Bullets.length; i++)
 		{
-			if(bullet.Type == this.Bullets[i])
+			if(bullet.Type == BulletType.getType(this.Bullets[i]))
 			{
 				return true;
 			}
@@ -97,21 +110,33 @@ public class GunType
 		return false;
 	}
 
+	public static GunType getType(int gunID)
+	{
+		try
+		{
+			return Guns[gunID];
+		}
+		finally
+		{
+			
+		}
+	}
+	
 	//Pistols
 	
 	public static GunType PistolM9 = new GunType(
-			VariableHandler.ItemID, "m9", "M9",
+			0, VariableHandler.ItemID, "m9", "M9",
 			4, 1, .3f, .6f, 1.1f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.45f, 0.01f, 15,
-			32, 3, 0, 19f, new BulletType[]{
-			BulletType.test
+			32, 3, 0, 19f, new int[]{
+			0
 			});
 	
 	public static GunType PistolM1911 = new GunType(
-			VariableHandler.ItemID + 1, "m1911", "M1911",
+			1, VariableHandler.ItemID + 1, "m1911", "M1911",
 			5, 1, .4f, .7f, 1.2f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.5f, 0.01f, 8,
-			40, 4, 0, 12.5f, new BulletType[]{
-			BulletType.test
+			40, 4, 0, 12.5f, new int[]{
+			1
 			});
 }

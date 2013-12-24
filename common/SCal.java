@@ -73,6 +73,7 @@ public class SCal
 				false
 				};
 		KeyBindingRegistry.registerKeyBinding(new KeybindClass(key, repeat));
+		this.Proxy.RegisterRenders();
 		
 		LanguageRegistry.addName(m9, "M9");
 		LanguageRegistry.addName(m1911, "M1911");

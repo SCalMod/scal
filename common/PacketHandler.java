@@ -5,6 +5,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 import scal.client.EventHook;
+import scal.guns.BulletType;
+import scal.guns.EntityBullet;
 import scal.guns.ItemGun;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -40,7 +42,7 @@ public class PacketHandler implements IPacketHandler
 					VariableHandler.RecoilLevel += gun.Type.Recoil;
 					for (int i = 0; i < gun.Type.NumBullets; i ++)
 					{
-						world.spawnEntityInWorld(new EntityArrow(world, entityPlayer, gun.Type.BulletSpeed));
+						world.spawnEntityInWorld(new EntityBullet(world, entityPlayer, gun.Type.BulletSpeed, BulletType.getType(gun.Type.Bullets[0])));
 					}
 				}
 			}
