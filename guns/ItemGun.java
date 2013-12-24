@@ -313,6 +313,6 @@ public class ItemGun extends Item
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister register)
 	{
-		this.itemIcon = register.registerIcon("scal" + this.Type.TexturePath);
+		this.itemIcon = register.registerIcon("scal:" + this.Type.TexturePath);
 	}
 }

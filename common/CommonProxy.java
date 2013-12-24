@@ -21,4 +21,9 @@ public class CommonProxy
 	{
 		
 	}
+
+	public void updateRecoil() 
+	{
+		
+	}
 }

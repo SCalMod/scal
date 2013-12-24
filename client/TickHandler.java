@@ -19,14 +19,17 @@ public class TickHandler implements IScheduledTickHandler
 			{
 				VariableHandler.HitMarkerTimer--;
 			}
+			
 			if(VariableHandler.ReloadInterval > 0)
 			{
 				VariableHandler.ReloadInterval--;
 			}
+			
 			if(VariableHandler.ShootInterval > 0)
 			{
 				VariableHandler.ShootInterval--;
 			}
+			
 			if(VariableHandler.ThreeRoundTimer > 0)
 			{
 				VariableHandler.ThreeRoundTimer--;
@@ -36,6 +39,12 @@ public class TickHandler implements IScheduledTickHandler
 					VariableHandler.ThreeRoundIterator = 0;
 				}
 			}
+
+            if (VariableHandler.RecoilLevel > 0)
+            {
+            	VariableHandler.RecoilLevel *= 0.8f;
+            }
+            VariableHandler.AntiRecoil += VariableHandler.RecoilLevel;
 		}
 	}
 
@@ -47,6 +56,7 @@ public class TickHandler implements IScheduledTickHandler
 			SCal.Proxy.renderMarker();
 			SCal.Proxy.renderSight();
 			SCal.Proxy.renderGUI();
+			SCal.Proxy.updateRecoil();
 		}
 	}
 

@@ -37,6 +37,7 @@ public class SCal
 	public static CreativeTabs gunTab = new CreativeTabs("gunTab");
 	
 	public static ItemGun m9 = new ItemGun(GunType.PistolM9);
+	public static ItemGun m1911 = new ItemGun(GunType.PistolM1911);
 	
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
@@ -74,6 +75,7 @@ public class SCal
 		KeyBindingRegistry.registerKeyBinding(new KeybindClass(key, repeat));
 		
 		LanguageRegistry.addName(m9, "M9");
+		LanguageRegistry.addName(m1911, "M1911");
 		
 		LanguageRegistry.instance().addStringLocalization("itemGroup.gunTab", "en_US", "SCal Mod");
 	}
