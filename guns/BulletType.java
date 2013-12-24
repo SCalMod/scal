@@ -20,14 +20,9 @@ public class BulletType
 	
 	public BulletType(int bulletID, String texturePath, int gun, boolean isTracer)
 	{
-		System.out.println("BulletInit begin");
-		System.out.println("BulletID = " + bulletID);
 		this.BulletID = bulletID;
-		System.out.println("TexturePath = " + texturePath);
 		this.TexturePath = texturePath;
-		System.out.println("Gun = " + GunType.getType(gun));
 		this.Gun = gun;
-		System.out.println("isTracer = " + isTracer);
 		this.IsTracer = isTracer;
 		
 		if(Bullets[bulletID] == null)

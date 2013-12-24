@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 
 import scal.client.KeybindClass;
 import scal.client.TickHandler;
+import scal.guns.EntityBullet;
 import scal.guns.GunType;
 import scal.guns.ItemGun;
 import net.minecraft.client.settings.KeyBinding;
@@ -18,6 +19,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -73,6 +75,8 @@ public class SCal
 				false
 				};
 		KeyBindingRegistry.registerKeyBinding(new KeybindClass(key, repeat));
+		EntityRegistry.registerModEntity(EntityBullet.class, "Bullet", 1, this, 40, 80, true);
+		LanguageRegistry.instance().addStringLocalization("entity.SCal Guns.EntityBullet.name", "en_US", "Bullet");
 		this.Proxy.RegisterRenders();
 		
 		LanguageRegistry.addName(m9, "M9");

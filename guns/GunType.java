@@ -126,17 +126,17 @@ public class GunType
 	
 	public static GunType PistolM9 = new GunType(
 			0, VariableHandler.ItemID, "m9", "M9",
-			4, 1, .3f, .6f, 1.1f,
+			4, 1, .6f, .3f, 1.1f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.45f, 0.01f, 15,
-			32, 3, 0, 19f, new int[]{
+			32, 3, 0, 2f, new int[]{//19f, new int[]{
 			0
 			});
 	
 	public static GunType PistolM1911 = new GunType(
 			1, VariableHandler.ItemID + 1, "m1911", "M1911",
-			5, 1, .4f, .7f, 1.2f,
+			5, 1, .7f, .4f, 1.2f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.5f, 0.01f, 8,
-			40, 4, 0, 12.5f, new int[]{
+			40, 4, 0, 1.5f, new int[]{//12.5f, new int[]{
 			1
 			});
 }
