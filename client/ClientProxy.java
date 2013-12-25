@@ -23,8 +23,8 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void RegisterRenders()
 	{
-		//RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
-		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderSnowball(SCal.m9));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
+		//RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderSnowball(SCal.m9));
 	}
 	
 	@Override

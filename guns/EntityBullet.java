@@ -56,7 +56,7 @@ public class EntityBullet extends Entity implements IProjectile
 		this.renderDistanceWeight = 20.0d;
 		this.shootingEntity = par2EntityLivingBase;
 
-		this.posY = par2EntityLivingBase.posY + (double)par2EntityLivingBase.getEyeHeight() - 0.10000000149011612D;
+		this.posY = par2EntityLivingBase.posY + (double)par2EntityLivingBase.getEyeHeight() - 0.10000000149011612d;
 		double d0 = par3EntityLivingBase.posX - par2EntityLivingBase.posX;
 		double d1 = par3EntityLivingBase.boundingBox.minY + (double)(par3EntityLivingBase.height / 3.0F) - this.posY;
 		double d2 = par3EntityLivingBase.posZ - par2EntityLivingBase.posZ;
@@ -87,7 +87,7 @@ public class EntityBullet extends Entity implements IProjectile
 
 		this.setSize(0.5F, 0.5F);
 		this.setLocationAndAngles(par2EntityLivingBase.posX, par2EntityLivingBase.posY + (double)par2EntityLivingBase.getEyeHeight(), par2EntityLivingBase.posZ, par2EntityLivingBase.rotationYaw, par2EntityLivingBase.rotationPitch);
-		this.setPosition(this.posX, this.posY, this.posZ);
+        this.setPosition(this.posX, this.posY, this.posZ);
 		this.yOffset = 0.0F;
 		this.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * 3.14159f) * MathHelper.cos(this.rotationPitch / 180.0F * 3.14159f));
 		this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * 3.14159f) * MathHelper.cos(this.rotationPitch / 180.0F * 3.14159f));
