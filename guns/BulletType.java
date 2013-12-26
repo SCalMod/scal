@@ -18,6 +18,10 @@ public class BulletType
 	public static BulletType BulletM9 = new BulletType(0, "bulletm9", 0, false);
 	public static BulletType BulletM1911 = new BulletType(1, "bulletm1911", 1, false);
 	
+	//Snipers
+
+	public static BulletType BulletL96 = new BulletType(2, "bulletl96", 2, true);
+	
 	public BulletType(int bulletID, String texturePath, int gun, boolean isTracer)
 	{
 		this.BulletID = bulletID;

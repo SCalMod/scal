@@ -38,8 +38,14 @@ public class SCal
 	
 	public static CreativeTabs gunTab = new CreativeTabs("gunTab");
 	
+	//Pistols
+	
 	public static ItemGun m9 = new ItemGun(GunType.PistolM9);
 	public static ItemGun m1911 = new ItemGun(GunType.PistolM1911);
+	
+	//Snipers
+	
+	public static ItemGun l96 = new ItemGun(GunType.SniperL96);
 	
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
@@ -79,8 +85,14 @@ public class SCal
 		LanguageRegistry.instance().addStringLocalization("entity.SCal Guns.EntityBullet.name", "en_US", "Bullet");
 		this.Proxy.RegisterRenders();
 		
+		//Pistols
+		
 		LanguageRegistry.addName(m9, "M9");
 		LanguageRegistry.addName(m1911, "M1911");
+		
+		//Snipers
+		
+		LanguageRegistry.addName(l96, "L96");
 		
 		LanguageRegistry.instance().addStringLocalization("itemGroup.gunTab", "en_US", "SCal Mod");
 	}
