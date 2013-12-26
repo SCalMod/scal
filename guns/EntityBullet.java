@@ -89,32 +89,32 @@ public class EntityBullet extends Entity implements IProjectile
 		this.setLocationAndAngles(par2EntityLivingBase.posX, par2EntityLivingBase.posY + (double)par2EntityLivingBase.getEyeHeight(), par2EntityLivingBase.posZ, par2EntityLivingBase.rotationYaw, par2EntityLivingBase.rotationPitch);
         this.setPosition(this.posX, this.posY, this.posZ);
 		this.yOffset = 0.0F;
-		this.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * 3.14159f) * MathHelper.cos(this.rotationPitch / 180.0F * 3.14159f));
-		this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * 3.14159f) * MathHelper.cos(this.rotationPitch / 180.0F * 3.14159f));
-		this.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * 3.14159f));
-		Vector3f movementVector = new Vector3f((float)this.motionX, (float)this.motionY, (float)this.motionZ);
-		movementVector.normalise();
-		this.motionX = movementVector.x * this.GunType.BulletSpeed;
-		this.motionZ = movementVector.z * this.GunType.BulletSpeed;
-		this.motionY = movementVector.y * this.GunType.BulletSpeed; 
+		this.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
+        this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
+        this.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI));
 
-		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, VariableHandler.IsScoped ? this.GunType.AccuracyScope : this.GunType.AccuracyHip);
-	}
-
-	public void setThrowableHeading(double par1, double par3, double par5, float par8)
-	{
-		this.motionX += ((float)((int)(this.rand.nextGaussian() * 1000000)) / 1000000) * (double)(this.rand.nextBoolean() ? -1 : 1) * (double)par8;
-		this.motionY += ((float)((int)(this.rand.nextGaussian() * 1000000)) / 1000000) * (double)(this.rand.nextBoolean() ? -1 : 1) * (double)par8;
-		this.motionZ += ((float)((int)(this.rand.nextGaussian() * 1000000)) / 1000000) * (double)(this.rand.nextBoolean() ? -1 : 1) * (double)par8;
-		float f3 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-		this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(par1, par5) * 180.0D / Math.PI);
-		this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(par3, (double)f3) * 180.0D / Math.PI);
+		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, this.GunType.BulletSpeed, VariableHandler.IsScoped ? this.GunType.AccuracyScope : this.GunType.AccuracyHip);
 	}
 
 	public void setThrowableHeading(double par1, double par3, double par5, float par7, float par8)
-	{
-
-	}
+    {
+        float f2 = MathHelper.sqrt_double(par1 * par1 + par3 * par3 + par5 * par5);
+        par1 /= (double)f2;
+        par3 /= (double)f2;
+        par5 /= (double)f2;
+        par1 += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)par8;
+        par3 += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)par8;
+        par5 += this.rand.nextGaussian() * (double)(this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double)par8;
+        par1 *= (double)par7;
+        par3 *= (double)par7;
+        par5 *= (double)par7;
+        this.motionX = par1;
+        this.motionY = par3;
+        this.motionZ = par5;
+        float f3 = MathHelper.sqrt_double(par1 * par1 + par5 * par5);
+        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(par1, par5) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(par3, (double)f3) * 180.0D / Math.PI);
+    }
 
 	@SideOnly(Side.CLIENT)
 	public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)

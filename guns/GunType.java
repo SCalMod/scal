@@ -126,17 +126,17 @@ public class GunType
 	
 	public static GunType PistolM9 = new GunType(
 			0, VariableHandler.ItemID, "m9", "M9",
-			4, 1, .1f, .33f, .73f,
+			4, 1, 3.4f, 1.7f, 1.1f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.45f, 0.01f, 15,
-			32, 3, 0, 3.17f, new int[]{
+			32, 3, 0, 3f, new int[]{
 			0
 			});
 	
 	public static GunType PistolM1911 = new GunType(
 			1, VariableHandler.ItemID + 1, "m1911", "M1911",
-			5, 1, .12f, .4f, .8f,
+			5, 1, 3.6f, 1.8f, 1.1f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.5f, 0.01f, 8,
-			40, 4, 0, 2.08f, new int[]{
+			40, 4, 0, 3f, new int[]{
 			1
 			});
 	
@@ -144,9 +144,9 @@ public class GunType
 	
 	public static GunType SniperL96 = new GunType(
 			2, VariableHandler.ItemID + 2, "l96", "L96",
-			14, 1, .26f, .013f, 3.8f,
-			FireType.BoltAction, WeaponType.Sniper, 2.2f, 0.01f, 10,
-			96, 25, 0, 4.5f, new int[]{
+			14, 1, 12f, 1.2f, 4.4f,
+			FireType.BoltAction, WeaponType.Sniper, 0.8f, 0.01f, 10,
+			96, 25, 0, 3f, new int[]{
 			2
 			});
 }

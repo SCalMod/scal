@@ -26,18 +26,18 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
 		//RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderSnowball(SCal.m9));
 	}
-	
+
 	@Override
 	public void registerSounds()
 	{
-		
+
 	}
 
 	@Override
 	public void renderMarker()
 	{
 		Minecraft client = FMLClientHandler.instance().getClient();
-		
+
 		if(VariableHandler.HitMarkerTimer > 0)
 		{
 			ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, client.entityRenderer, VariableHandler.ZoomLevel, "cameraZoom", "feild_78503_V");
@@ -48,10 +48,10 @@ public class ClientProxy extends CommonProxy
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90d, 0.0d, 1.0d);
-            tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90d, 1.0d, 1.0d);
-            tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
-            tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
-            tessellator.draw();
+			tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90d, 1.0d, 1.0d);
+			tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
+			tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
+			tessellator.draw();
 		}
 	}
 
@@ -59,76 +59,83 @@ public class ClientProxy extends CommonProxy
 	public void renderSight()
 	{
 		Minecraft client = FMLClientHandler.instance().getClient();
-		
+
 		if(client.thePlayer != null)
 		{
 			InventoryPlayer inventory = client.thePlayer.inventory;
-			
-			if(Mouse.isButtonDown(0) && inventory.getCurrentItem() != null && inventory.getCurrentItem().getItem() instanceof ItemGun && client.currentScreen == null)
+
+			if(inventory.getCurrentItem() != null && inventory.getCurrentItem().getItem() instanceof ItemGun && client.currentScreen == null)
 			{
-				ItemGun gun = (ItemGun)inventory.getCurrentItem().getItem();
-				float newZoom = gun.Type.SightZoom;
-				if(VariableHandler.ZoomLevel <= newZoom)
+				if(Mouse.isButtonDown(0) && VariableHandler.ReloadInterval <= 0)
 				{
-					if(VariableHandler.ZoomLevel + 0.8f <= newZoom)
+					ItemGun gun = (ItemGun)inventory.getCurrentItem().getItem();
+					float newZoom = gun.Type.SightZoom;
+					if(VariableHandler.ZoomLevel <= newZoom)
 					{
-						VariableHandler.ZoomLevel += 0.8f;
+						if(VariableHandler.ZoomLevel + 0.8f <= newZoom)
+						{
+							VariableHandler.ZoomLevel += 0.8f;
+						}
+						else
+						{
+							VariableHandler.ZoomLevel = newZoom;
+						}
 					}
-					else
+					if(VariableHandler.ZoomLevel > newZoom)
 					{
-						VariableHandler.ZoomLevel = newZoom;
+						if(VariableHandler.ZoomLevel + 0.8f >= newZoom)
+						{
+							VariableHandler.ZoomLevel -= 0.8f;
+						}
+						else
+						{
+							VariableHandler.ZoomLevel = newZoom;
+						}
 					}
+
+					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, client.entityRenderer, VariableHandler.ZoomLevel, "cameraZoom", "feild_78503_V");
+					ScaledResolution scale = new ScaledResolution(client.gameSettings, client.displayWidth, client.displayHeight);
+					int i = scale.getScaledWidth();
+					int j = scale.getScaledHeight();
+					client.renderEngine.bindTexture(new ResourceLocation("scal", "textures/overlays/" + gun.Type.ScopePath + ".png"));
+					Tessellator tessellator = Tessellator.instance;
+					tessellator.startDrawingQuads();
+					tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90d, 0.0d, 1.0d);
+					tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90d, 1.0d, 1.0d);
+					tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
+					tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
+					tessellator.draw();
+
+					VariableHandler.IsScoped = true;
 				}
-				if(VariableHandler.ZoomLevel > newZoom)
+				else
 				{
-					if(VariableHandler.ZoomLevel + 0.8f >= newZoom)
+					if (VariableHandler.ZoomLevel >= 1.0)
 					{
-						VariableHandler.ZoomLevel -= 0.8f;
+						VariableHandler.ZoomLevel -= 0.8;
 					}
-					else
+					if (VariableHandler.ZoomLevel < 1.0)
 					{
-						VariableHandler.ZoomLevel = newZoom;
+						VariableHandler.ZoomLevel = 1.0F;
 					}
+
+					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, client.entityRenderer, VariableHandler.ZoomLevel, "cameraZoom", "field_78503_V");
+
+					VariableHandler.IsScoped = false;
 				}
-				
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, client.entityRenderer, VariableHandler.ZoomLevel, "cameraZoom", "feild_78503_V");
-				ScaledResolution scale = new ScaledResolution(client.gameSettings, client.displayWidth, client.displayHeight);
-				int i = scale.getScaledWidth();
-				int j = scale.getScaledHeight();
-				client.renderEngine.bindTexture(new ResourceLocation("scal", "textures/overlays/" + gun.Type.ScopePath + ".png"));
-				Tessellator tessellator = Tessellator.instance;
-				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90d, 0.0d, 1.0d);
-	            tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90d, 1.0d, 1.0d);
-	            tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
-	            tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
-				tessellator.draw();
-				
-				VariableHandler.IsScoped = true;
 			}
 			else
 			{
-				if (VariableHandler.ZoomLevel >= 1.0)
-				{
-					VariableHandler.ZoomLevel -= 0.8;
-				}
-				if (VariableHandler.ZoomLevel < 1.0)
-				{
-					VariableHandler.ZoomLevel = 1.0F;
-				}
-				
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, client.entityRenderer, VariableHandler.ZoomLevel, "cameraZoom", "field_78503_V");
-				
-				VariableHandler.IsScoped = false;
+
 			}
 		}
 	}
-	
+
 	@Override
 	public void updateRecoil()
 	{
 		Minecraft client = FMLClientHandler.instance().getClient();
-		
+
 		if(client.thePlayer != null)
 		{
 			client.thePlayer.rotationPitch -= VariableHandler.RecoilLevel;
@@ -140,6 +147,6 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void renderGUI()
 	{
-		
+
 	}
 }
