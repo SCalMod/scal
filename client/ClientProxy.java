@@ -66,9 +66,10 @@ public class ClientProxy extends CommonProxy
 
 			if(inventory.getCurrentItem() != null && inventory.getCurrentItem().getItem() instanceof ItemGun && client.currentScreen == null)
 			{
+				ItemGun gun = (ItemGun)inventory.getCurrentItem().getItem();
+				
 				if(Mouse.isButtonDown(0) && VariableHandler.ReloadInterval <= 0)
 				{
-					ItemGun gun = (ItemGun)inventory.getCurrentItem().getItem();
 					float newZoom = gun.Type.SightZoom;
 					if(VariableHandler.ZoomLevel <= newZoom)
 					{
@@ -120,13 +121,29 @@ public class ClientProxy extends CommonProxy
 					}
 
 					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, client.entityRenderer, VariableHandler.ZoomLevel, "cameraZoom", "field_78503_V");
+					ScaledResolution scale = new ScaledResolution(client.gameSettings, client.displayWidth, client.displayHeight);
+					int i = scale.getScaledWidth();
+					int j = scale.getScaledHeight();
+					client.renderEngine.bindTexture(new ResourceLocation("scal", "textures/overlays/Reticle.png"));
+					Tessellator tessellator = Tessellator.instance;
+					
+					//Top
+					
+					tessellator.startDrawingQuads();
+					//Top Left
+					tessellator.addVertexWithUV(i / 2 - 4, j / 2 - ((gun.Type.AccuracyHip) * (client.displayHeight / 75)) - (client.displayHeight / 40), -90d, 0.0d, 1.0d);
+					//Top Right
+					tessellator.addVertexWithUV(i / 2 + 4, j / 2 - ((gun.Type.AccuracyHip) * (client.displayHeight / 75)) - (client.displayHeight / 40), -90d, 0.1d, 1.0d);
+					/*/Bottom Right
+					tessellator.addVertexWithUV(i / 2 + 4, j / 2 - ((gun.Type.AccuracyHip) * (j / 26)), -90d, 0.1d, 0.0d);
+					//Bottom Left
+					tessellator.addVertexWithUV(i / 2 - 4, j / 2 - ((gun.Type.AccuracyHip) * (j / 26)), -90d, 0.0d, 0.0d);*/
+					tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
+					tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
+					tessellator.draw();
 
 					VariableHandler.IsScoped = false;
 				}
-			}
-			else
-			{
-
 			}
 		}
 	}

@@ -144,7 +144,7 @@ public class GunType
 	
 	public static GunType SniperL96 = new GunType(
 			2, VariableHandler.ItemID + 2, "l96", "L96",
-			14, 1, 12f, 1.2f, 4.4f,
+			14, 1, 24f, 1.2f, 4.4f,
 			FireType.BoltAction, WeaponType.Sniper, 0.8f, 0.01f, 10,
 			96, 25, 0, 3f, new int[]{
 			2
