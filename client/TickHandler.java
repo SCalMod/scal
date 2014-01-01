@@ -34,7 +34,7 @@ public class TickHandler implements IScheduledTickHandler
 			{
 				VariableHandler.ThreeRoundTimer--;
 				
-				if(VariableHandler.ThreeRoundTimer <= 0)
+				if(VariableHandler.ThreeRoundTimer < 0)
 				{
 					VariableHandler.ThreeRoundIterator = 0;
 				}
@@ -45,6 +45,16 @@ public class TickHandler implements IScheduledTickHandler
             	VariableHandler.RecoilLevel *= 0.8f;
             }
             VariableHandler.AntiRecoil += VariableHandler.RecoilLevel;
+            
+            if(VariableHandler.AccuracyAddition > 0f)
+            {
+            	VariableHandler.AccuracyAddition *= 0.8f;
+            	
+            	if(VariableHandler.AccuracyAddition < 0)
+				{
+					VariableHandler.AccuracyAddition = 0;
+				}
+            }
 		}
 	}
 

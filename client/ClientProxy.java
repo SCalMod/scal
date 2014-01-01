@@ -127,19 +127,58 @@ public class ClientProxy extends CommonProxy
 					client.renderEngine.bindTexture(new ResourceLocation("scal", "textures/overlays/Reticle.png"));
 					Tessellator tessellator = Tessellator.instance;
 					
+					float accuracy = VariableHandler.getRealAccuracy();
+					
 					//Top
 					
 					tessellator.startDrawingQuads();
 					//Top Left
-					tessellator.addVertexWithUV(i / 2 - 1, j / 2 - ((gun.Type.AccuracyHip) * (i / 75)), -90d, 0.0d, 1.0d);
+					tessellator.addVertexWithUV(i / 2 - 1, j / 2 - (accuracy * (i / 75)) + (i / 40), -90d, 0.0d, 1.0d);
 					//Top Right
-					tessellator.addVertexWithUV(i / 2 + 1, j / 2 - ((gun.Type.AccuracyHip) * (i / 75)), -90d, 0.1d, 1.0d);
+					tessellator.addVertexWithUV(i / 2 + 1, j / 2 - (accuracy * (i / 75)) + (i / 40), -90d, 0.1d, 1.0d);
 					//Bottom Right
-					tessellator.addVertexWithUV(i / 2 + 1, j / 2 - ((gun.Type.AccuracyHip) * (i / 75)) - (i / 40), -90d, 0.1d, 0.0d);
+					tessellator.addVertexWithUV(i / 2 + 1, j / 2 - (accuracy * (i / 75)), -90d, 0.1d, 0.0d);
 					//Bottom Left
-					tessellator.addVertexWithUV(i / 2 - 1, j / 2 - ((gun.Type.AccuracyHip) * (i / 75)) - (i / 40), -90d, 0.0d, 0.0d);
-					//tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
-					//tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
+					tessellator.addVertexWithUV(i / 2 - 1, j / 2 - (accuracy * (i / 75)), -90d, 0.0d, 0.0d);
+					tessellator.draw();
+					
+					//Bottom
+					
+					tessellator.startDrawingQuads();
+					//Top Left
+					tessellator.addVertexWithUV(i / 2 - 1, j / 2 + (accuracy * (i / 75)), -90d, 0.0d, 1.0d);
+					//Top Right
+					tessellator.addVertexWithUV(i / 2 + 1, j / 2 + (accuracy * (i / 75)), -90d, 0.1d, 1.0d);
+					//Bottom Right
+					tessellator.addVertexWithUV(i / 2 + 1, j / 2 + (accuracy * (i / 75)) - (i / 40), -90d, 0.1d, 0.0d);
+					//Bottom Left
+					tessellator.addVertexWithUV(i / 2 - 1, j / 2 + (accuracy * (i / 75)) - (i / 40), -90d, 0.0d, 0.0d);
+					tessellator.draw();
+					
+					//Right
+					
+					tessellator.startDrawingQuads();
+					//Top Left
+					tessellator.addVertexWithUV(i / 2 + (accuracy * (i / 75)) - (i / 40), j / 2 + 1, -90d, 0.0d, 1.0d);
+					//Top Right
+					tessellator.addVertexWithUV(i / 2 + (accuracy * (i / 75)), j / 2 + 1, -90d, 0.1d, 1.0d);
+					//Bottom Right
+					tessellator.addVertexWithUV(i / 2 + (accuracy * (i / 75)), j / 2 - 1, -90d, 0.1d, 0.0d);
+					//Bottom Left
+					tessellator.addVertexWithUV(i / 2 + (accuracy * (i / 75)) - (i / 40), j / 2 - 1, -90d, 0.0d, 0.0d);
+					tessellator.draw();
+					
+					//Left
+					
+					tessellator.startDrawingQuads();
+					//Top Left
+					tessellator.addVertexWithUV(i / 2 - (accuracy * (i / 75)), j / 2 + 1, -90d, 0.0d, 1.0d);
+					//Top Right
+					tessellator.addVertexWithUV(i / 2 - (accuracy * (i / 75)) + (i / 40), j / 2 + 1, -90d, 0.1d, 1.0d);
+					//Bottom Right
+					tessellator.addVertexWithUV(i / 2 - (accuracy * (i / 75)) + (i / 40), j / 2 - 1, -90d, 0.1d, 0.0d);
+					//Bottom Left
+					tessellator.addVertexWithUV(i / 2 - (accuracy * (i / 75)), j / 2 - 1, -90d, 0.0d, 0.0d);
 					tessellator.draw();
 
 					VariableHandler.IsScoped = false;

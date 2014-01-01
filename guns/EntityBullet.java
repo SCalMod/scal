@@ -75,7 +75,7 @@ public class EntityBullet extends Entity implements IProjectile
 		}
 	}
 
-	public EntityBullet(World par1World, EntityLivingBase par2EntityLivingBase, float par3, BulletType type)
+	public EntityBullet(World par1World, EntityLivingBase par2EntityLivingBase, BulletType type)
 	{
 		super(par1World);
 
@@ -113,10 +113,23 @@ public class EntityBullet extends Entity implements IProjectile
         		bSpeed = 2.6f;
         		break;
         		
-        		//finish
+        	case LMG:
+        		bSpeed = 2.5f;
+        		break;
+        	
+        	case Sniper:
+        		bSpeed = 2.8f;
+        		
+        	case Launcher:
+        		bSpeed = 1.8f;
+        		break;
+        		
+        	case Other:
+        		bSpeed = 2.0f;
+        		break;
         }
         
-		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, this.GunType.BulletSpeed, VariableHandler.IsScoped ? this.GunType.AccuracyScope : this.GunType.AccuracyHip);
+		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, bSpeed, VariableHandler.getRealAccuracy());
 	}
 
 	public void setThrowableHeading(double par1, double par3, double par5, float par7, float par8)

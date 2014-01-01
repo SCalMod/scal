@@ -42,7 +42,8 @@ public class PacketHandler implements IPacketHandler
 					VariableHandler.RecoilLevel += gun.Type.Recoil;
 					for (int i = 0; i < gun.Type.NumBullets; i ++)
 					{
-						world.spawnEntityInWorld(new EntityBullet(world, entityPlayer, gun.Type.BulletSpeed, BulletType.getType(gun.Type.Bullets[0])));
+						world.spawnEntityInWorld(new EntityBullet(world, entityPlayer, BulletType.getType(gun.Type.Bullets[0])));
+						VariableHandler.AccuracyAddition = gun.Type.Recoil * 2.5f;
 					}
 				}
 			}
