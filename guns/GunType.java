@@ -27,7 +27,6 @@ public class GunType
 	public int ReloadTime;
 	public int ShotInterval;
 	public int ThreeRoundInterval;
-	public float BulletSpeed;
 	public int[] Bullets;
 	
 	public String ShootSound;
@@ -57,7 +56,7 @@ public class GunType
 	public GunType(int gunID, int itemID, String shortName, String name,
 			int damage, int numBullets, float accuracyHip, float accuracyScope, float sightZoom,
 			FireType fType, WeaponType wType, float recoil, float bulletDrop, int maxCapacity,
-			int reloadTime, int shotInterval, int threeRoundInterval, float bulletSpeed, int[] bullets)
+			int reloadTime, int shotInterval, int threeRoundInterval, int[] bullets)
 	{
 		this.GunID = gunID;
 		this.ItemID = itemID;
@@ -80,7 +79,6 @@ public class GunType
 		this.ReloadTime = reloadTime;
 		this.ShotInterval = shotInterval;
 		this.ThreeRoundInterval = threeRoundInterval;
-		this.BulletSpeed = bulletSpeed;
 		this.Bullets = bullets;
 		
 		this.ShootSound = shortName;
@@ -128,7 +126,7 @@ public class GunType
 			0, VariableHandler.ItemID, "m9", "M9",
 			4, 1, 3.4f, 1.7f, 1.1f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.45f, 0.01f, 15,
-			32, 3, 0, 3f, new int[]{
+			32, 3, 0, new int[]{
 			0
 			});
 	
@@ -136,7 +134,7 @@ public class GunType
 			1, VariableHandler.ItemID + 1, "m1911", "M1911",
 			5, 1, 3.6f, 1.8f, 1.1f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.5f, 0.01f, 8,
-			40, 4, 0, 3f, new int[]{
+			40, 4, 0, new int[]{
 			1
 			});
 	
@@ -144,9 +142,9 @@ public class GunType
 	
 	public static GunType SniperL96 = new GunType(
 			2, VariableHandler.ItemID + 2, "l96", "L96",
-			14, 1, 24f, 1.2f, 4.4f,
+			14, 1, 12f, 1.2f, 4.4f,
 			FireType.BoltAction, WeaponType.Sniper, 0.8f, 0.01f, 10,
-			96, 25, 0, 3f, new int[]{
+			96, 25, 0, new int[]{
 			2
 			});
 }

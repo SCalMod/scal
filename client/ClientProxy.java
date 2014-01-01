@@ -131,15 +131,15 @@ public class ClientProxy extends CommonProxy
 					
 					tessellator.startDrawingQuads();
 					//Top Left
-					tessellator.addVertexWithUV(i / 2 - 4, j / 2 - ((gun.Type.AccuracyHip) * (client.displayHeight / 75)) - (client.displayHeight / 40), -90d, 0.0d, 1.0d);
+					tessellator.addVertexWithUV(i / 2 - 1, j / 2 - ((gun.Type.AccuracyHip) * (i / 75)), -90d, 0.0d, 1.0d);
 					//Top Right
-					tessellator.addVertexWithUV(i / 2 + 4, j / 2 - ((gun.Type.AccuracyHip) * (client.displayHeight / 75)) - (client.displayHeight / 40), -90d, 0.1d, 1.0d);
-					/*/Bottom Right
-					tessellator.addVertexWithUV(i / 2 + 4, j / 2 - ((gun.Type.AccuracyHip) * (j / 26)), -90d, 0.1d, 0.0d);
+					tessellator.addVertexWithUV(i / 2 + 1, j / 2 - ((gun.Type.AccuracyHip) * (i / 75)), -90d, 0.1d, 1.0d);
+					//Bottom Right
+					tessellator.addVertexWithUV(i / 2 + 1, j / 2 - ((gun.Type.AccuracyHip) * (i / 75)) - (i / 40), -90d, 0.1d, 0.0d);
 					//Bottom Left
-					tessellator.addVertexWithUV(i / 2 - 4, j / 2 - ((gun.Type.AccuracyHip) * (j / 26)), -90d, 0.0d, 0.0d);*/
-					tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
-					tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
+					tessellator.addVertexWithUV(i / 2 - 1, j / 2 - ((gun.Type.AccuracyHip) * (i / 75)) - (i / 40), -90d, 0.0d, 0.0d);
+					//tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0d, -90d, 1.0d, 0.0d);
+					//tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0d, -90d, 0.0d, 0.0d);
 					tessellator.draw();
 
 					VariableHandler.IsScoped = false;

@@ -93,6 +93,29 @@ public class EntityBullet extends Entity implements IProjectile
         this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
         this.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI));
 
+        float bSpeed = 3f;
+        
+        switch(this.GunType.WType)
+        {
+        	case Pistol:
+        		bSpeed = 2.2f;
+        		break;
+        		
+        	case SMG:
+        		bSpeed = 2.4f;
+        		break;
+        		
+        	case Shotgun:
+        		bSpeed = 1.8f;
+        		break;
+        		
+        	case AssaultRifle:
+        		bSpeed = 2.6f;
+        		break;
+        		
+        		//finish
+        }
+        
 		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, this.GunType.BulletSpeed, VariableHandler.IsScoped ? this.GunType.AccuracyScope : this.GunType.AccuracyHip);
 	}
 
