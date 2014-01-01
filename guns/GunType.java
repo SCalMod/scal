@@ -9,7 +9,6 @@ public class GunType
 	public int GunID;
 	public int ItemID;
 	public String TexturePath;
-	public String Name;
 	public String ShortName;
 	
 	public int Damage;
@@ -53,7 +52,7 @@ public class GunType
 		Other
 	}
 	
-	public GunType(int gunID, int itemID, String shortName, String name,
+	public GunType(int gunID, int itemID, String shortName,
 			int damage, int numBullets, float accuracyHip, float accuracyScope, float sightZoom,
 			FireType fType, WeaponType wType, float recoil, float bulletDrop, int maxCapacity,
 			int reloadTime, int shotInterval, int threeRoundInterval, int[] bullets)
@@ -61,7 +60,6 @@ public class GunType
 		this.GunID = gunID;
 		this.ItemID = itemID;
 		this.TexturePath = shortName;
-		this.Name = name;
 		this.ShortName = shortName;
 		
 		this.Damage = damage;
@@ -123,7 +121,7 @@ public class GunType
 	//Pistols
 	
 	public static GunType PistolM9 = new GunType(
-			0, VariableHandler.ItemID, "m9", "M9",
+			0, VariableHandler.ItemID, "m9",
 			4, 1, 3.4f, 1.7f, 1.1f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.45f, 0.006f, 15,
 			32, 3, 0, new int[]{
@@ -131,7 +129,7 @@ public class GunType
 			});
 	
 	public static GunType PistolM1911 = new GunType(
-			1, VariableHandler.ItemID + 1, "m1911", "M1911",
+			1, VariableHandler.ItemID + 2, "m1911",
 			5, 1, 3.6f, 1.8f, 1.1f,
 			FireType.SemiAuto, WeaponType.Pistol, 0.5f, 0.006f, 8,
 			40, 4, 0, new int[]{
@@ -141,7 +139,7 @@ public class GunType
 	//Snipers
 	
 	public static GunType SniperL96 = new GunType(
-			2, VariableHandler.ItemID + 2, "l96", "L96",
+			2, VariableHandler.ItemID + 4, "l96",
 			14, 1, 12f, 0.8f, 4.4f,
 			FireType.BoltAction, WeaponType.Sniper, 0.8f, 0.004f, 10,
 			96, 25, 0, new int[]{

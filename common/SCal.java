@@ -4,8 +4,10 @@ import org.lwjgl.input.Keyboard;
 
 import scal.client.KeybindClass;
 import scal.client.TickHandler;
+import scal.guns.BulletType;
 import scal.guns.EntityBullet;
 import scal.guns.GunType;
+import scal.guns.ItemBullet;
 import scal.guns.ItemGun;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
@@ -41,11 +43,14 @@ public class SCal
 	//Pistols
 	
 	public static ItemGun m9 = new ItemGun(GunType.PistolM9);
+	public static ItemBullet bulletm9 = new ItemBullet(BulletType.BulletM9);
 	public static ItemGun m1911 = new ItemGun(GunType.PistolM1911);
+	public static ItemBullet bulletm1911 = new ItemBullet(BulletType.BulletM1911);
 	
 	//Snipers
 	
 	public static ItemGun l96 = new ItemGun(GunType.SniperL96);
+	public static ItemBullet bulletl96 = new ItemBullet(BulletType.BulletL96);
 	
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
@@ -88,11 +93,14 @@ public class SCal
 		//Pistols
 		
 		LanguageRegistry.addName(m9, "M9");
+		LanguageRegistry.addName(bulletm9, "M9 Ammo");
 		LanguageRegistry.addName(m1911, "M1911");
+		LanguageRegistry.addName(bulletm1911, "M1911 Ammo");
 		
 		//Snipers
 		
 		LanguageRegistry.addName(l96, "L96");
+		LanguageRegistry.addName(bulletl96, "L96 Ammo");
 		
 		LanguageRegistry.instance().addStringLocalization("itemGroup.gunTab", "en_US", "SCal Mod");
 	}

@@ -122,7 +122,11 @@ public class ItemGun extends Item
 				
 				if(!player.capabilities.isCreativeMode)
 				{
-					itemStack.damageItem(1, player);
+					itemStack.setItemDamage(itemStack.getItemDamage() + 1);
+
+					System.out.println("Itemstack damaged");
+					System.out.println("Current Damage: " + itemStack.getItemDamage());
+					System.out.println("Max Damage: " + itemStack.getMaxDamage());
 				}
 				
 				return true;
@@ -141,6 +145,8 @@ public class ItemGun extends Item
 	
 	public boolean reload(ItemStack stack, World world, Entity entity)
 	{
+		System.out.println("Reloading");
+		
 		boolean didReload = false;
 		
 		if(entity instanceof EntityPlayer)
@@ -154,7 +160,7 @@ public class ItemGun extends Item
 			{
 				ItemStack item = player.inventory.getStackInSlot(i);
 				
-				if(item != null && item.getItem() instanceof ItemBullet && this.Type.isAmmo((ItemBullet)(item.getItem())))
+				if(item != null && item.getItem() instanceof ItemBullet && this.Type.isAmmo((ItemBullet)item.getItem()))
 				{
 					int bulletsHere = item.getMaxDamage() - item.getItemDamage();
 					
@@ -169,31 +175,13 @@ public class ItemGun extends Item
 			if(magazineSlot != -1)
 			{
 				ItemStack newStack = player.inventory.getStackInSlot(magazineSlot);
-				BulletType bType = ((ItemBullet)newStack.getItem()).Type;
-				
-				if(stack.getItemDamage() < stack.getItem().getMaxDamage())
-				{
-					int newSize = 0;
-					
-					if(newStack.getMaxDamage() - newStack.getItemDamage() <= stack.getMaxDamage() - stack.getItemDamage())
-					{
-						newSize = newStack.getMaxDamage() - newStack.getItemDamage();
-					}
-					else
-					{
-						newSize = (newStack.getMaxDamage() - newStack.getItemDamage()) - stack.getItemDamage();
-					}
-
-					newStack.damageItem(newSize, player);
-					stack.setItemDamage(stack.getItemDamage() - newSize);
-				}
-				else
-				{
-					stack.setItemDamage(newStack.getMaxDamage() - newStack.getItemDamage());
-					newStack.damageItem(newStack.getMaxDamage() - newStack.getItemDamage(), player);
-				}
+				stack.setItemDamage(newStack.getItemDamage());
 				
 				didReload = true;
+			}
+			else
+			{
+				player.addChatMessage("No ammo found");
 			}
 		}
 		
